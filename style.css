@@ -1,0 +1,95 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #1a1a1a;
+    color: #cccccc;
+    font-size: 28px; /* Increase font size more */
+}
+main {
+    padding: 5px;
+}
+section {
+    margin-bottom: 10px;
+}
+h1, h2 {
+    color: #4bb49b; /* Fixed double # */
+    font-size: 36px; /* Increase font size more */
+}
+
+a {
+    text-decoration: none; /* Remove underline */
+    color: #00cccc; /* Default text color */
+    font-weight: bold; /* Make links bold */
+    transition: background-color 0.3s ease; /* Smooth transition for background color */
+}
+a:hover {
+    background-color: #00ffff; /* Change background color on hover */
+    color: black; /* Change text color on hover */
+}
+img {
+  width: 500px;
+  margin-right: 30px;
+  margin-bottom: 30px;
+}
+
+#alek {
+    width: 300px;
+}
+
+/* Blog index styles */
+.blog-index {
+    max-width: 80%;
+    margin: 0 20px;
+    padding: 0.05em;
+}
+
+.post {
+    display: flex;
+    align-items: flex-start;
+    margin: 1em 0;
+    border-bottom: 1px solid #ccc;
+    padding: 1em;
+    padding-bottom: 1em;
+}
+
+.thumb {
+    width: 200px;
+    height: 200px;
+    margin-right: 2em;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.post .info a {
+    font-size: 1.5em;
+    font-weight: bold;
+    text-decoration: none;
+    color: #00cccc;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.post .info .date {
+    font-size: 1.1em;
+    color: #888888;
+    margin: 0.3em 0;
+    font-weight: normal;
+}
+
+.post .info p {
+    margin: 0.5em 0 0;
+    color: #aaaaaa;
+    font-size: 1.2em;
+    font-weight: normal;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    max-width: 100%;
+}
+
+.post .info p a {
+    color: #aaaaaa;
+    font-size: 1em;
+    font-weight: normal;
+    text-decoration: underline;
+}
