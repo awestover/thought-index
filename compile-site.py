@@ -3,12 +3,14 @@ from pathlib import Path
 from datetime import datetime
 import re
 import urllib.parse
+from generate_images import generate_new_images
+
+generate_new_images()
 
 # --- Config ---
 STACK_DIR = "../2blog/content/0stack"
 OUTPUT_HTML = "index.html"
 BASE_URL = "https://awestover.github.io/thoughts/0stack/"
-THUMBNAIL_PATH = "img.jpg"  # Same for every post
 
 # --- HTML Templates ---
 HEADER = """
@@ -36,14 +38,9 @@ def convert_markdown_links(text):
     return re.sub(pattern, r'<a href="\2">\1</a>', text)
 
 def format_filename_for_url(filename):
-    """Format filename for URL by removing extension, replacing spaces with hyphens, and escaping."""
-    # Remove .md or .html extension
     name = Path(filename).stem
-    
-    # Replace spaces with hyphens
+    name = name.replace('!', '').replace('?', '').replace('%', '')
     name = name.replace(' ', '-')
-    
-    # URL encode the result
     return urllib.parse.quote(name)
 
 def extract_description(filepath, max_lines=1):
@@ -67,9 +64,12 @@ def generate_post_html(filename, description, date_str):
     name = Path(filename).stem
     url_filename = format_filename_for_url(filename)
     url = BASE_URL + url_filename
+    
+    # Construct thumbnail path based on post name
+    thumbnail_path = f"thumbnails/{url_filename}.jpg"
 
     html = '<div class="post">\n'
-    html += f'  <img class="thumb" src="{THUMBNAIL_PATH}" alt="{name} thumbnail">\n'
+    html += f'  <img class="thumb" src="{thumbnail_path}" alt="{name} thumbnail">\n'
     html += '  <div class="info">\n'
     html += f'    <a href="{url}">{name}</a>\n'
     html += f'    <div class="date">({date_str})</div>\n'
