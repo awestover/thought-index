@@ -56,30 +56,17 @@ Blog post:
         
 
 def generate_image(prompt, output_path="generated_image.jpg"):
-    api_key = os.environ.get("OTHER_OPENAI_API_KEY")
-    url = "https://api.openai.com/v1/images/generations"
+    api_key = os.environ.get("TOGETHER_API_KEY")
+    url = "https://api.together.xyz/v1/images/generations"
 
     payload = {
-        "model": "dall-e-3",
+        "model": "black-forest-labs/FLUX.1-schnell",
         "prompt": prompt,
+        "steps": 4,
         "n": 1,
-        "size": "1024x1024",
-        "quality": "standard",
-        "response_format": "url"
+        "height": 1024,
+        "width": 1024,
     }
-
-    # Old Together AI code (commented out):
-    # url = "https://api.together.xyz/v1/images/generations"
-    # payload = {
-    #     "model": "black-forest-labs/FLUX.1-schnell",
-    #     "prompt": prompt,
-    #     "steps": 4,
-    #     "samples": 1,
-    #     "height": 512,
-    #     "width": 512,
-    #     "guidance_scale": 3.5,
-    #     "output_format": "jpeg"
-    # }
 
     headers = {
         "accept": "application/json",
@@ -90,14 +77,14 @@ def generate_image(prompt, output_path="generated_image.jpg"):
     response.raise_for_status()
     data = response.json()
     image_url = data["data"][0]["url"]
-    
+
     # Download the image
     img_response = requests.get(image_url)
     img_response.raise_for_status()
-    
+
     with open(output_path, "wb") as f:
         f.write(img_response.content)
-    
+
     print(f"✅ Image saved to {output_path}")
     return output_path
 
