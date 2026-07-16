@@ -1,6 +1,7 @@
 import os
 import requests
 import urllib.parse
+import anthropic
 from pathlib import Path
 
 def format_filename_for_url(filename):
@@ -33,34 +34,24 @@ Output only the image generation prompt — no extra text or explanation
 Blog post:
 {blog_content}
 """
-    api_key = os.environ.get("OTHER_OPENAI_API_KEY")
-    # Call the OpenAI API to generate the prompt
-    url = "https://api.openai.com/v1/chat/completions"
-    
-    payload = {
-        "model": "gpt-4.1-mini",
-        "messages": [
+    # Call the Anthropic API to generate the prompt.
+    # Reads ANTHROPIC_API_KEY from the environment.
+    client = anthropic.Anthropic()
+    response = client.messages.create(
+        model="claude-opus-4-8",
+        max_tokens=300,
+        messages=[
             {"role": "user", "content": prompt}
         ],
-        "max_tokens": 200,
-        "temperature": 0.7
-    }
-    
-    headers = {
-        "accept": "application/json",
-        "content-type": "application/json",
-        "authorization": f"Bearer {api_key}"
-    }
-    
-    response = requests.post(url, json=payload, headers=headers)
-    response.raise_for_status()
-    
-    data = response.json()
-    generated_prompt = data["choices"][0]["message"]["content"].strip()
-    
+    )
+
+    generated_prompt = next(
+        block.text for block in response.content if block.type == "text"
+    ).strip()
+
     # Add instruction to avoid letters
     generated_prompt += " No text or letters in the image."
-    
+
     return generated_prompt
         
 
