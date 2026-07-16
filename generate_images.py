@@ -1,3 +1,4 @@
+import base64
 import os
 import requests
 import urllib.parse
@@ -56,16 +57,16 @@ Blog post:
         
 
 def generate_image(prompt, output_path="generated_image.jpg"):
-    api_key = os.environ.get("TOGETHER_API_KEY")
-    url = "https://api.together.xyz/v1/images/generations"
+    api_key = os.environ.get("OPENAI_API_KEY")
+    url = "https://api.openai.com/v1/images/generations"
 
     payload = {
-        "model": "black-forest-labs/FLUX.1-schnell",
+        "model": "gpt-image-1",
         "prompt": prompt,
-        "steps": 4,
         "n": 1,
-        "height": 1024,
-        "width": 1024,
+        "size": "1024x1024",
+        "quality": "medium",
+        "output_format": "jpeg",
     }
 
     headers = {
@@ -73,17 +74,12 @@ def generate_image(prompt, output_path="generated_image.jpg"):
         "content-type": "application/json",
         "authorization": f"Bearer {api_key}"
     }
-    response = requests.post(url, json=payload, headers=headers)
+    response = requests.post(url, json=payload, headers=headers, timeout=300)
     response.raise_for_status()
     data = response.json()
-    image_url = data["data"][0]["url"]
-
-    # Download the image
-    img_response = requests.get(image_url)
-    img_response.raise_for_status()
 
     with open(output_path, "wb") as f:
-        f.write(img_response.content)
+        f.write(base64.b64decode(data["data"][0]["b64_json"]))
 
     print(f"✅ Image saved to {output_path}")
     return output_path
